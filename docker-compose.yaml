@@ -1,0 +1,61 @@
+version: "3.9"
+services:
+  server:
+    container_name: onyx-backend-server
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+
+    restart: always
+    stdin_open: true
+    tty: true
+
+    #
+    # ports:
+    # - "22005:22005"
+    # - "22006:22006"
+    # - "63222:63222"
+    # - "3402:3402"
+
+    volumes:
+      - .:/source:cached
+      - /source/node_modules/
+      - /source/.cache
+
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - WORK_DEV=1
+
+    depends_on:
+      - db
+
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  db:
+    image: mariadb:latest
+    container_name: onyx-backend-database
+    restart: always
+    command: mariadbd --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - DB_CHARSET=utf8mb4
+      - DB_COLLATION=utf8mb4_general_ci
+    volumes:
+      - ./database:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    container_name: onyx-backend-adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+    depends_on:
+      - db

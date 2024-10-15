@@ -1,0 +1,15 @@
+{
+    "host": "127.0.0.1",
+    "db_user": "root",
+    "password": "",
+    "database": "server",
+    "type": "mysql",
+    "port": 3306,
+
+    "logs_host": "127.0.0.1",
+    "logs_db_user": "root",
+    "logs_password": "",
+    "logs_database": "logs",
+    "logs_type": "mysql",
+    "logs_port": 3306
+}
